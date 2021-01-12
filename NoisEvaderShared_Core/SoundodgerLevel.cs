@@ -33,6 +33,8 @@ namespace NoisEvader
             private set => audioDuration = value;
         }
 
+        public bool UsesCenterSpawnerGlitch { get; set; }
+
         public string XmlHash { get; private set; }
 
         protected readonly CultureInfo culture = CultureInfo.InvariantCulture;
@@ -202,6 +204,13 @@ namespace NoisEvader
                 spinRateInfo.Add(new TsVal<float>(time, val));
             }
             Script.SpinRateNodes = spinRateInfo;
+            // Check if the center spawner glitch is used in this level.
+            // I don't know the exact conditions that trigger it but it's something like this
+            if (float.IsNaN(Script.SpinRateNodes[1].Time))
+            {
+                UsesCenterSpawnerGlitch = true;
+                Script.SpinRateNodes.RemoveAt(1);
+            }
 
             // Bullets
             var shotNodes = doc.DocumentElement.SelectNodes("//Script[@shotType]");

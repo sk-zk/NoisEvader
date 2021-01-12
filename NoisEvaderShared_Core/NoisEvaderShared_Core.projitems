@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Audio\WaveformData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BulletDrawer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CachedLevelData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CenterGlitchSpawner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Circle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CircleHitbox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Database.cs" />

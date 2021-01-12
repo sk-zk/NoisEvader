@@ -60,7 +60,7 @@ namespace NoisEvader
             CalcPosition(Arena);
         }
 
-        private void CalcPosition(ArenaCircle arena)
+        protected virtual void CalcPosition(ArenaCircle arena)
         {
             var touchRadius = arena.Circle.Radius + Radius;
             var spwnX = arena.Circle.Center.X + (touchRadius * (float)Math.Cos(Angle)) - Radius;
@@ -94,7 +94,7 @@ namespace NoisEvader
             UpdateFlares(levelTime);
         }
 
-        private void UpdateFlares(LevelTime levelTime)
+        protected virtual void UpdateFlares(LevelTime levelTime)
         {
             for (int i = 0; i < ActiveFlares.Count; i++)
             {

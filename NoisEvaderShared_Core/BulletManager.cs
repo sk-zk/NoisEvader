@@ -219,9 +219,7 @@ namespace NoisEvader
                     var currStreamTime = levelTime.SongPosition - stream.Time;
                     var currSpeed = stream.Speed0 + (currStreamTime * ((stream.Speed1 - stream.Speed0) / stream.Duration));
                     var currAngle = stream.Angle0 + (currStreamTime * ((stream.Angle1 - stream.Angle0) / stream.Duration));
-                    currAngle = MathEx.WrapAngle(currAngle);
                     var currOffset = stream.Offset0 + (currStreamTime * ((stream.Offset1 - stream.Offset0) / stream.Duration));
-                    currOffset = MathEx.WrapAngle(currOffset);
 
                     bool lastShot = levelTime.SongPosition + StreamShot.FireFrequency > stream.Time + stream.Duration;
 

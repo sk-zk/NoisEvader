@@ -15,6 +15,7 @@ namespace NoisEvader
 
         private float distBetweenSpawners;
         private double songPosition;
+        protected bool useCenterSpawnerGlitch;
 
         public ArenaSpawners(ArenaCircle arena)
         {
@@ -23,6 +24,7 @@ namespace NoisEvader
 
         public void CreateSpawners(SoundodgerLevel level)
         {
+            useCenterSpawnerGlitch = level.UsesCenterSpawnerGlitch;
             ConstructSpawners(level);
             SetSpawnerAngles(level.Info.Enemies);
         }
@@ -43,11 +45,17 @@ namespace NoisEvader
 
         protected virtual Spawner ConstructSpawner(SoundodgerLevel level) 
         {
-            return new Spawner()
-            {
-                Arena = arena,
-                BorderColor = level.Info.Colors.Outline,
-            };
+            Spawner spawner;
+            if (useCenterSpawnerGlitch)
+                spawner = new CenterGlitchSpawner();
+            else
+                spawner = new Spawner();
+
+            spawner.Arena = arena;
+            spawner.BorderColor = level.Info.Colors.Outline;
+            spawner.Center = Vector2.Zero;
+
+            return spawner;
         }
 
         protected virtual void SetSpawnerAngles(double amount)
@@ -61,12 +69,15 @@ namespace NoisEvader
             // more than one stream per enemy.
             // conveniently, this behaviour emerges naturally from the code
             // i'd already written, so I didn't have to change much.
-
             var ceil = (int)Math.Ceiling(amount);
             distBetweenSpawners = (float)(2 * Math.PI / amount);
             for (int i = 0; i < ceil; i++)
             {
-                Spawners[i].Angle = (i * distBetweenSpawners) - MathHelper.ToRadians(90);
+                Spawners[i].Angle = (i * distBetweenSpawners);
+                if (!useCenterSpawnerGlitch)
+                {
+                    Spawners[i].Angle -= MathHelper.ToRadians(90);
+                }
             }
         }
 
@@ -114,6 +125,7 @@ namespace NoisEvader
         public virtual void Update(LevelTime levelTime)
         {
             songPosition = levelTime.SongPosition; // used in draw call
+
             var spawnerSpeed = CalcSpawnerSpeed(levelTime);
             foreach (var spawner in Spawners)
             {
