@@ -1,0 +1,12 @@
+<Project>
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="ScoreScreen" OutputPath="C:\Users\Daniel\Desktop" />
+  <Grid RowSpacing="40">
+    <Grid.RowsProportions>
+      <Proportion Type="Part" />
+      <Proportion Type="Auto" />
+      <Proportion Type="Part" />
+    </Grid.RowsProportions>
+    <Label Text="99%" HorizontalAlignment="Center" GridRow="1" Id="Score" />
+    <TextButton Text="Back" Padding="5" HorizontalAlignment="Center" GridRow="2" Id="Back" />
+  </Grid>
+</Project>

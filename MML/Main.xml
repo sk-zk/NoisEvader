@@ -1,0 +1,12 @@
+<Project StylesheetPath="../NoisEvaderShared_Core/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="MainMenu" OutputPath="C:\Users\Daniel\Desktop" />
+  <VerticalStackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Label Text="0.0.0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Id="Version" />
+    <Image HorizontalAlignment="Center" VerticalAlignment="Center" Id="Logo" />
+    <HorizontalStackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 30, 0, 0">
+      <TextButton Text="Play" TextColor="#FFFFFFFF" StyleName="MainMenuBtn" Id="Play" />
+      <TextButton Text="Settings" TextColor="#FFFFFFFF" StyleName="MainMenuBtn" Id="Settings" />
+      <TextButton Text="Quit" TextColor="#FFFFFFFF" StyleName="MainMenuBtn" Id="Exit" />
+    </HorizontalStackPanel>
+  </VerticalStackPanel>
+</Project>

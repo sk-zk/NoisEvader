@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cba1abb5-a44e-4d43-ab2d-ec09a7cdf190</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>NoisEvader</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ArenaCircle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\SoundTouch\SoundTouch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\SoundTouch\SoundTouchSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\WaveformData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BulletDrawer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CachedLevelData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Circle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CircleHitbox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FlashlightVignette.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FpsCounter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Glow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHitbox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LevelSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LevelTime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveSpawners.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LocalScores.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PointHitbox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Replays\Replay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Replays\ReplayArena.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Replays\ReplayingPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Replays\ReplayRecorder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Score.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ArenaSpawners.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpawnIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeAccumulator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeIter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeWarps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TsVal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tweener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Arena.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ArenaCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\AudioPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bubble.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BubbleGlow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bullet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BulletManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CircleSprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CircleParticle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CircleParticleSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorBullet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorHoming.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Flare.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fonts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Heart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HeartSprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Homing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HomingGlow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDrawable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveSpawner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoisEvader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoisEvader.UI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OuterRing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OuterRings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HumanPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Config.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScreenShake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShotCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleText.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SoundodgerLevel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LevelInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LevelScript.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Spawner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpawnerTransition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Spike.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpikeGlow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TextureGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TrailBullet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ArenaPause.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ArenaPause.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\IScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelBoxButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelBoxFolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelBoxLevel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelPositionScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelPositionScreen.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelSettingsWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelSettingsWindow.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\MainMenu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\MainMenu.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MathEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\MessageBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\MessageBox.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ModWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ModWindow.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ScorePanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ScoreScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\ScoreScreen.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelSelect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\LevelSelect.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Settings.Generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\SortType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Wave.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Waveform.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Fonts\DejaVuSansMono.ttf" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Fonts\Orkney Regular.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Content\Svg\HeartBullet.svg" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Content\Svg\TempLogo.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Fonts\DejaVuSans.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Fonts\NotoSansCJKjp-Regular.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Fonts\Licenses\Orkney.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\default_ui_skin.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\default_ui_skin_atlas.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Content\Svg\HeartOutline.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="$(MSBuildThisFileDirectory)Content\Fonts\Licenses\DejaVu.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Content\Fonts\Licenses\Noto.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CreateDb.sql" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Content\HeartBullet.shape" />
+    <None Include="$(MSBuildThisFileDirectory)NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\default_font.fnt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\default_font_small.fnt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\default_ui_skin.atlas">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Content\Fonts\Licenses\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Replays\" />
+  </ItemGroup>
+</Project>

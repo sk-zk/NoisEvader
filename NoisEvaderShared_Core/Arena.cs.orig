@@ -1,0 +1,829 @@
+﻿using LilyPath;
+using LilyPath.Pens;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NoisEvader
+{
+    public class Arena
+    {
+        public const float ArenaRadius = 200;
+
+        private SoundodgerLevel level;
+        public SoundodgerLevel Level => level;
+
+        public Mods ActiveMod;
+
+        protected ArenaState state = ArenaState.Idle;
+
+        protected Circle arenaCircle;
+        private GradientPen glowPen = new GradientPen(Color.Transparent,
+            new Color(Color.White, 0.45f), 75);
+        private Circle songPositionCircle;
+        private Circle scoreCircle;
+        private OuterRingsManager outerRings;
+        protected Player player;
+
+        private List<Spawner> spawners = new List<Spawner>();
+        private float liveModSpawnerZone = MathHelper.ToRadians(180);
+        private float liveModTransitionZone = MathHelper.ToRadians(14);
+
+        protected BulletManager bulletMgr;
+        protected CircleParticleSystem particles = new CircleParticleSystem();
+
+        protected TimeWarpManager timeWarpMgr;
+        protected TimeWarpManager spinRateMgr;
+
+        private AudioPlayer Audio => AudioPlayer.Instance;
+        protected float songPosition;
+        protected float prevSongPosition;
+        protected float songElapsed;
+
+        protected ArenaCamera camera;
+        private ScreenShake screenShake;
+
+        protected InputHelper inputHelper;
+
+        private RenderTarget2D flashlightTarget;
+        private FlashlightVignette flashlight;
+
+        private Vector2 ScreenCenter => NoisEvader.ScreenCenter;
+
+        public Matrix ScreenTransform =>
+            camera.Transform * Matrix.CreateTranslation(screenShake.Offset);
+
+        public float BaseGameSpeed { get; set; } = normalGameSpeed;
+        private const float slomoGameSpeed = 0.5f;
+        private const float normalGameSpeed = 1f;
+
+        private float GameSpeed
+        {
+            get
+            {
+                if (slomo)
+                    return BaseGameSpeed * slomoGameSpeed;
+                return BaseGameSpeed;
+            }
+        }
+
+        private bool slomo;
+
+        public Color BackgroundColor
+        {
+            get
+            {
+                if (level is null)
+                    return Color.Black;
+
+                return slomo ?
+                    level.Info.Colors.SlomoBackground
+                    : level.BackgroundColor;
+            }
+        }
+
+        private MouseState mouseStateBeforePause;
+        private bool paused;
+        public bool Paused
+        {
+            get => paused;
+            set
+            {
+                paused = value;
+                if (paused)
+                    Pause();
+                else
+                    Unpause();
+            }
+        }
+
+        /// <summary>
+        /// For how long the level has to be played to increase the playcount of the level.
+        /// </summary>
+        private const float playThreshold = 10000;
+
+        private static UI.ScoreScreen scoreScreen;
+        private SimpleText skipIntroText;
+        private SimpleText debugText;
+
+        // skip intro stuff
+        private float firstShotTime;
+        private int acclimation = 800;
+        private int minIntroDuration = 4000;
+
+        private ReplayRecorder replayRecorder;
+
+        public event EventHandler ExitedToMenu;
+        public event EventHandler ArenaPaused;
+        public event EventHandler ArenaUnpaused;
+        public event EventHandler<bool> CursorVisibilityChanged;
+        public event EventHandler<float?> TickLimitChanged;
+
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
+        public Arena(InputHelper inputHelper)
+        {
+            this.inputHelper = inputHelper;
+
+            arenaCircle = new Circle()
+            {
+                Subdivisions = 80
+            };
+            songPositionCircle = new Circle();
+            scoreCircle = new Circle
+            {
+                LineThickness = 0f
+            };
+
+            //create camera stuff
+            camera = new ArenaCamera();
+            screenShake = new ScreenShake();
+
+            scoreScreen = new UI.ScoreScreen();
+            scoreScreen.BackPressed += (_, __) => ExitToMenu();
+        }
+
+        /// <summary>
+        /// Loads a level.
+        /// </summary>
+        /// <param name="level"></param>
+        public void LoadLevelAndStart(GraphicsDevice gd, SoundodgerLevel level, Mods mods)
+        {
+            replayRecorder = new ReplayRecorder();
+            player = new HumanPlayer(replayRecorder);
+            InitAndStart(gd, level, mods);
+        }
+
+        protected void InitAndStart(GraphicsDevice gd, SoundodgerLevel level, Mods mods)
+        {
+            logger.Info("Loading level");
+            state = ArenaState.Loading;
+            this.level = level;
+
+            // init mods
+            ActiveMod = mods;
+            BaseGameSpeed = mods.GameSpeed;
+
+            TickLimitChanged?.Invoke(this, mods.TickRate);
+
+            // init game elements
+            SetArenaCircleScale();
+
+            if (mods.Flags.HasFlag(ModFlags.Live))
+            {
+                arenaCircle.Center = new Vector2(
+                    arenaCircle.Center.X,
+                    (NoisEvader.GameHeight * 0.6f) / 2f);
+            }
+            arenaCircle.FillColor = BackgroundColor;
+            arenaCircle.BorderColor = level.Info.Colors.Outline;
+
+            scoreCircle.Radius = 0f;
+            scoreCircle.FillColor = Util.GetActualScoreColor(level.Info.Colors.ScoreCircle);
+            scoreCircle.BorderColor = level.Info.Colors.Outline;
+
+            songPositionCircle.Radius = 0f;
+            songPositionCircle.FillColor = level.BackgroundColor;
+            songPositionCircle.BorderColor = level.Info.Colors.Outline;
+
+            outerRings = new OuterRingsManager(level.Info.Colors.OuterRings, arenaCircle);
+
+            player.BorderColor = level.Info.Colors.Outline;
+            player.CancelInvincibility();
+            player.HasHeart = false;
+
+            particles.Clear();
+
+            CreateSpawners(level.Info.Enemies);
+            CreateIndicatorList();
+
+            bulletMgr = new BulletManager(arenaCircle, level, spawners, mods, particles);
+
+            timeWarpMgr = new TimeWarpManager(level.Script.TimeWarpNodes);
+            spinRateMgr = new TimeWarpManager(level.Script.SpinRateNodes);
+
+            slomo = false;
+
+            if (mods.Flags.HasFlag(ModFlags.Flashlight))
+            {
+                flashlight = new FlashlightVignette();
+                flashlightTarget = new RenderTarget2D(gd,
+                    NoisEvader.ScreenBounds.Width, NoisEvader.ScreenBounds.Height);
+            }
+
+            Mouse.SetPosition((int)ScreenCenter.X, (int)ScreenCenter.Y);
+            player.Center = arenaCircle.Center;
+
+            InitSkipIntro();
+
+            debugText = new SimpleText()
+            {
+                Font = Fonts.Content.DebugFont,
+                Position = new Vector2(10, 10),
+                Color = Color.Gray,
+                Visible = false
+            };
+
+            if (player is HumanPlayer p)
+            {
+                p.Replay.XmlHash = level.XmlHash;
+                p.Replay.Timestamp = DateTime.UtcNow;
+                p.Replay.BurstSeed = BurstShot.Seed;
+            }
+
+            // init audio and start
+            Audio.PlaybackSpeed = GameSpeed;
+            Audio.Load(level.Info.Mp3Name);
+            foreach (Spawner spawner in spawners)
+                spawner.Start();
+            logger.Info("Starting level");
+            Audio.Play();
+            state = ArenaState.Playing;
+        }
+
+        private void InitSkipIntro()
+        {
+            firstShotTime = GetFirstShot().Time;
+            skipIntroText = new SimpleText()
+            {
+                Font = Fonts.Content.Orkney13,
+                Color = level.BackgroundColor.Invert(),
+                Text = "press space to skip intro",
+                Position = new Vector2(ScreenCenter.X, NoisEvader.ScreenBounds.Height * 0.75f),
+                XOrigin = XOrigin.Center,
+                YOrigin = YOrigin.Center,
+                Visible = false
+            };
+        }
+
+        private void SetArenaCircleScale()
+        {
+            var arenaRadius = ArenaRadius;
+            if (ActiveMod.Flags.HasFlag(ModFlags.Live))
+                arenaRadius *= 1.75f;
+            arenaCircle.Radius = arenaRadius;
+            arenaCircle.Center = Vector2.Zero;
+            arenaCircle.LineThickness = 2;
+
+            scoreCircle.Center = arenaCircle.Center;
+
+            songPositionCircle.Center = arenaCircle.Center;
+            songPositionCircle.LineThickness = arenaCircle.LineThickness;
+        }
+
+        /// <summary>
+        /// Creates evenly spaced spawners.
+        /// </summary>
+        protected void CreateSpawners(int amount)
+        {
+            spawners = new List<Spawner>(amount);
+
+            float angle;
+            float transitionZone;
+            float distBetweenSpawners;
+            float startAngle;
+
+            if (ActiveMod.Flags.HasFlag(ModFlags.Live))
+            {
+                angle = liveModSpawnerZone;
+                transitionZone = liveModTransitionZone;
+                distBetweenSpawners = angle / amount;
+                startAngle = MathHelper.ToRadians(90) + angle / 2f
+                    - distBetweenSpawners / 2f;
+                for (int i = 0; i < amount; i++)
+                {
+                    var spawnerCircle = new LiveSpawner(i * distBetweenSpawners - startAngle,
+                        arenaCircle.Center, arenaCircle.Radius)
+                    {
+                        BorderColor = level.Info.Colors.Outline,
+                        ActiveZone = angle,
+                        TransitionZone = liveModTransitionZone,
+                    };
+                    SetLastShot(i, spawnerCircle);
+                    spawners.Add(spawnerCircle);
+                }
+            }
+            else
+            {
+                distBetweenSpawners = (float)(2 * Math.PI / amount);
+                angle = MathHelper.ToRadians(360);
+                transitionZone = 0;
+                for (int i = 0; i < amount; i++)
+                {
+                    var spawnerCircle = new Spawner(i * distBetweenSpawners - MathHelper.ToRadians(90),
+                        arenaCircle.Center, arenaCircle.Radius)
+                    {
+                        BorderColor = level.Info.Colors.Outline,
+                    };
+                    SetLastShot(i, spawnerCircle);
+                    spawners.Add(spawnerCircle);
+                }
+            }
+
+            void SetLastShot(int i, Spawner spawner)
+            {
+                var lastShot = level.Script.Shots.LastOrDefault(
+                    x => x.Enemies.Contains(i + 1));
+
+                if (lastShot is null)
+                {
+                    spawner.DespawnPoint = 0f;
+                }
+                else
+                {
+                    spawner.DespawnPoint = lastShot.Time;
+                    if (lastShot is StreamShot ss)
+                        spawner.DespawnPoint += ss.Duration;
+                }
+            }
+        }
+
+        protected void CreateIndicatorList()
+        {
+            foreach (var shot in level.Script.Shots)
+            {
+                foreach(var enemyIdx in shot.Enemies)
+                {
+                    Util.GetSpawnerFromShotIndex(spawners, enemyIdx)
+                        .AddToIndicatorList(shot.Time,
+                        shot.GetBulletColor(level.Info));
+                }
+            }
+        }
+
+        private void Pause()
+        {
+            logger.Info("Paused game");
+            Audio.Pause();
+            state = ArenaState.Paused;
+            mouseStateBeforePause = Mouse.GetState();
+            ArenaPaused?.Invoke(this, null);
+        }
+
+        private void Unpause()
+        {
+            logger.Info("Unpaused game");
+            ArenaUnpaused?.Invoke(this, null);
+            Audio.Play();
+            state = ArenaState.Playing;
+            Mouse.SetPosition(mouseStateBeforePause.X, mouseStateBeforePause.Y);
+        }
+
+        /// <summary>
+        /// Updates the arena.
+        /// </summary>
+        public void Update(GameTime gameTime)
+        {
+            if (state == ArenaState.Idle)
+                return;
+
+            switch (state)
+            {
+                case ArenaState.Paused:
+                    UpdatePaused();
+                    break;
+                case ArenaState.Loading:
+                    UpdateLoading(gameTime);
+                    break;
+                case ArenaState.Playing:
+                    UpdatePlaying(gameTime);
+                    break;
+                case ArenaState.ScoreScreen:
+                    UpdateScoreScreen(gameTime);
+                    break;
+            }
+        }
+
+        private void UpdatePlaying(GameTime gameTime)
+        {
+            #if DEBUG
+            if (inputHelper.KeyPressed(Keys.H))
+            {
+                player.Invincibility = (player.Invincibility != InvincibilityType.Eternal) ?
+                    InvincibilityType.Eternal : InvincibilityType.None;
+            }
+            #endif
+
+            if (inputHelper.KeyPressed(Keys.F3))
+                debugText.Visible = !debugText.Visible;
+
+            if (inputHelper.MouseLeftPressed())
+                SetSlomo(true);
+            else if (inputHelper.MouseLeftReleased())
+                SetSlomo(false);
+
+            Audio.Update(GameSpeed);
+            prevSongPosition = songPosition;
+            songPosition = (float)Audio.Position;
+            songElapsed = songPosition - prevSongPosition;
+
+            if (songElapsed != 0)
+            {
+                // use audio-based timekeeping while the song is playing
+                gameTime = new GameTime(gameTime.TotalGameTime, 
+                    TimeSpan.FromMilliseconds(songElapsed));
+            }
+
+            camera.Update(gameTime, arenaCircle.Center);
+            UpdateSkipIntro(gameTime);
+            UpdateGameObjects(gameTime, timeWarpMgr.GetCurrentValue(songPosition));
+
+            replayRecorder?.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
+
+            if (inputHelper.KeyPressed(Keys.Escape))
+            {
+                Paused = true;
+                return;
+            }
+
+            if (Audio.PositionPercent > 0.99 && bulletMgr.Bullets.Count == 0)
+            {
+                EndLevel();
+            }
+        }
+
+        private void UpdateLoading(GameTime gameTime)
+        {
+            camera.Update(gameTime, arenaCircle.Center);
+            UpdatePlayer(gameTime);
+        }
+
+        private void UpdatePaused()
+        {
+            if (inputHelper.KeyPressed(Keys.Escape))
+                Paused = false;
+        }
+
+        private void UpdateScoreScreen(GameTime gameTime)
+        {
+            Audio.Update(GameSpeed);
+            if (inputHelper.KeyPressed(Keys.Escape) || inputHelper.KeyPressed(Keys.Enter))
+            {
+                ExitToMenu();
+            }
+            var songPos = Audio.IsPlaying
+                ? (float)Audio.Position
+                : (float)level.AudioDuration.TotalMilliseconds;
+            outerRings.Update(gameTime, GameSpeed, timeWarpMgr.GetCurrentValue(songPos));
+            particles.Update(gameTime, GameSpeed);
+            screenShake.Update(gameTime, GameSpeed);
+        }
+
+        public void ExitToMenu()
+        {
+            logger.Info("Exit to menu");
+            if (Audio.Position > playThreshold && !ActiveMod.Flags.HasFlag(ModFlags.Showcase)
+                && !ActiveMod.Flags.HasFlag(ModFlags.Auto))
+            {
+                SavedData.IncrementPlayCount(level.XmlHash);
+            }
+
+            Audio.Stop();
+            ExitedToMenu?.Invoke(this, null);
+        }
+
+        private void UpdateGameObjects(GameTime gameTime, float currentTimeWarp)
+        {
+            outerRings.Update(gameTime, GameSpeed, currentTimeWarp);
+            UpdateSpawners(gameTime, currentTimeWarp, songPosition);
+            UpdatePlayer(gameTime);
+            flashlight?.Update(player.Center);
+            bulletMgr.Update(gameTime, songPosition, GameSpeed, currentTimeWarp,
+                player.Center, particles, slomo);
+            UpdateProgressCircles();
+
+            particles.Update(gameTime, GameSpeed);
+            screenShake.Update(gameTime, GameSpeed);
+        }
+
+        private void UpdateSkipIntro(GameTime gameTime)
+        {
+            var possible = SkipIntroPossible;
+            skipIntroText.Visible = possible;
+            if (possible && inputHelper.KeyPressed(Keys.Space))
+                 FastForward(firstShotTime - acclimation, gameTime);
+        }
+
+        private Shot GetFirstShot() =>
+            level.Script.Shots.Find(x => x.Amount0 != 0);
+
+        private bool SkipIntroPossible =>
+            firstShotTime > minIntroDuration
+            && firstShotTime - acclimation > Audio.Position;
+
+        private void FastForward(float position, GameTime gameTime)
+        {
+            var oldPosition = (float)Audio.Position;
+            logger.Info("Fast forwarding from {a} to {b}", oldPosition, position);
+            const float step = 1000f / 60f;
+            for (float i = oldPosition; i <= position; i += step)
+            {
+                var total = gameTime.TotalGameTime + TimeSpan.FromMilliseconds(i);
+                var elapsed = TimeSpan.FromMilliseconds(step);
+                var fakeGameTime = new GameTime(total, elapsed);
+
+                var tw = timeWarpMgr.GetCurrentValue(i);
+                outerRings.Update(fakeGameTime, GameSpeed, tw);
+                UpdateSpawners(fakeGameTime, tw, i);
+            }
+            Audio.JumpTo(position);
+            prevSongPosition = position;
+            songPosition = position;
+        }
+
+        private void SetSlomo(bool slomo)
+        {
+            this.slomo = slomo;
+            Audio.PlaybackSpeed = GameSpeed;
+            camera.MouseFollowEnabled = slomo;
+
+            if (slomo)
+                camera.SlomoZoomIn();
+            else
+                camera.SlomoZoomOut();
+        }
+
+        /// <summary>
+        /// Updates spawners.
+        /// </summary>
+        private void UpdateSpawners(GameTime gameTime, float timeWarp, float songPos)
+        {
+            var spawnerSpeed = CalcSpawnerSpeed(gameTime, songPos);
+            foreach (var spawner in spawners)
+            {
+                if (spawner.IsStillInUse(songPos) || spawner.ActiveFlares.Count > 0)
+                    spawner.Update(gameTime, GameSpeed, timeWarp, spawnerSpeed, songPos);
+            }
+        }
+
+        /// <summary>
+        /// Updates the player and collisions.
+        /// </summary>
+        protected virtual void UpdatePlayer(GameTime gameTime)
+        {
+<<<<<<< HEAD
+            player.Update(gameTime, arenaCircle, camera, ActiveMod.Flags.HasFlag(ModFlags.Live));
+            flashlight?.Update(player.Center);
+=======
+            player.Update(gameTime, arenaCircle, camera, ActiveMods.Live);
+>>>>>>> replays
+
+            if (ActiveMod.Flags.HasFlag(ModFlags.Showcase))
+                return;
+
+           var collided = bulletMgr.CheckPlayerCollisions(player);
+            if (collided == CollisionType.Bad)
+                CollisionOccurred();
+            else if (collided == CollisionType.Heart)
+                replayRecorder?.AddHeart();
+        }
+
+        protected virtual void CollisionOccurred()
+        {
+            if (player.Invincibility != InvincibilityType.None)
+                return;
+
+            if (player.HasHeart)
+            {
+                player.HeartLost();
+                return;
+            }
+
+            player.Hit();
+            particles.CreatePlayerHitParticles(player.Center);
+
+            DoHitScreenShake();
+        }
+
+        protected void DoHitScreenShake()
+        {
+            if (SavedData.GameSettings.ScreenShakeOnHit)
+            {
+                const int Magnitude = 6;
+                const int Duration = 600;
+                screenShake.Shake(Magnitude, Duration);
+            }
+        }
+
+        /// <summary>
+        /// Updates score and song position circles in the center of the arena.
+        /// </summary>
+        private void UpdateProgressCircles()
+        {
+            var songPosPercent = Math.Min(1, Audio.PositionPercent);
+
+            songPositionCircle.Radius = (float)(songPosPercent * arenaCircle.Radius);
+            songPositionCircle.Center = arenaCircle.Center;
+
+            if (bulletMgr.TotalExited > 0)
+                scoreCircle.Radius = bulletMgr.ScorePercent * songPositionCircle.Radius;
+            else
+                scoreCircle.Radius = songPositionCircle.Radius;
+
+            scoreCircle.Center = arenaCircle.Center;
+        }
+
+        /// <summary>
+        /// Calculates spawner speed at current song position.
+        /// </summary>
+        /// <returns></returns>
+        private float CalcSpawnerSpeed(GameTime gameTime, float songPos)
+        {
+            // TODO: Proper accel. calculation
+            return (float)(gameTime.ElapsedGameTime.TotalMilliseconds *
+                Spawner.RotationPerMs) *
+                timeWarpMgr.GetCurrentValue(songPos) *
+                spinRateMgr.GetCurrentValue(songPos);
+        }
+
+        /// <summary>
+        /// Switches to the score screen and saves the score.
+        /// </summary>
+        private void EndLevel()
+        {
+            logger.Info("Level ended");
+            state = ArenaState.ScoreScreen;
+
+            var score = bulletMgr.ScorePercent;
+            int displayScore;
+            if (bulletMgr.TotalExited == 0)
+                displayScore = 100;
+            else
+                displayScore = (int)Math.Round(score * 100, MidpointRounding.AwayFromZero);
+
+            scoreScreen.Score.TextColor = Color.White;
+            scoreScreen.Score.Text = $"{displayScore}%";
+            // generating a font instead of just using an existing one allows me 
+            // to render text at arbitrary sizes
+            var size = (int)(arenaCircle.Radius * 1.1f * bulletMgr.ScorePercent);
+            scoreScreen.Score.Font = Fonts.Ttf.GenerateFont(scoreScreen.Score.Text,
+                Fonts.Ttf.Orkney, size);
+            CursorVisibilityChanged?.Invoke(this, true);
+            scoreScreen.Show();
+
+            outerRings.SpawnNewRings = false;
+
+<<<<<<< HEAD
+            if (!ActiveMod.Flags.HasFlag(ModFlags.Showcase) &&
+                !ActiveMod.Flags.HasFlag(ModFlags.Zen))
+            {
+                SavedData.SaveScore(level.XmlHash, score, player.TotalHits, ActiveMod, player.HasHeart);
+=======
+            if (player is HumanPlayer p)
+            {
+                replayRecorder.Replay.FinalScorePercent = score;
+                var filename = replayRecorder.Replay.Timestamp.ToUnix().ToString() + SavedData.ReplayExtension;
+                if (!ActiveMods.Showcase && !ActiveMods.Zen)
+                    SavedData.SaveScore(level.XmlHash, replayRecorder.Replay, filename, ActiveMods, p.HasHeart);
+>>>>>>> replays
+            }
+        }
+
+        /// <summary>
+        /// Draws the arena.
+        /// </summary>
+        public void Draw(GraphicsDevice gd, SpriteBatch spriteBatch, DrawBatch drawBatch)
+        {
+            if (state == ArenaState.Idle)
+                return;
+
+            if (state == ArenaState.ScoreScreen)
+            {
+                DrawScoreScreen(drawBatch);
+                return;
+            }
+
+            // 1) to rendertargets
+            if (flashlight != null)
+                RenderFlashlight(gd, drawBatch);
+
+            // 2) to backbuffer
+            if (ShouldDrawPlayer())
+                player.DrawShadow(drawBatch);
+
+            outerRings.Draw(drawBatch);
+
+            if (level.Info.HasBlackBackground || slomo)
+                drawBatch.DrawCircle(glowPen, arenaCircle.Center, arenaCircle.Radius);
+
+            // draw flares oldest to newest.
+            // not a great way of doing it but Maybe We Should looks much better now
+            var flares = spawners.SelectMany(x => x.ActiveFlares).OrderBy(x => x.StartTime);
+            foreach (var flare in flares)
+                flare.Draw(drawBatch);
+
+            arenaCircle.Draw(drawBatch);
+
+            foreach (Spawner spawner in spawners)
+            {
+                if (spawner.IsStillInUse(songPosition))
+                    spawner.Draw(drawBatch);
+            }
+
+            songPositionCircle.Draw(drawBatch);
+            scoreCircle.Draw(drawBatch);
+
+            if (skipIntroText.Visible)
+                DrawWithoutTransform(spriteBatch, () => skipIntroText.Draw(spriteBatch));
+
+            if (ShouldDrawPlayer())
+                player.Draw(spriteBatch, drawBatch);
+
+            if (state == ArenaState.Playing)
+                bulletMgr.Draw(spriteBatch, drawBatch);
+
+            particles.Draw(drawBatch);
+
+            if (flashlight != null)
+            {
+                DrawWithoutTransform(spriteBatch, () => spriteBatch.Draw(flashlightTarget, Vector2.Zero, Color.White));
+            }
+
+            // F3 text
+            if (debugText.Visible)
+            {
+                DrawWithoutTransform(spriteBatch, () =>
+                {
+                    var debugInfo = "";
+
+                    debugInfo += TimeSpan.FromMilliseconds(songPosition).ToString(@"mm\:ss\.FF") + "\n";
+
+                    debugInfo += "\n";
+                    debugInfo += $"GS: {GameSpeed:0.###}\n";
+                    debugInfo += $"SR: {spinRateMgr.GetCurrentValue(songPosition):0.###}\n";
+                    debugInfo += $"TW: {timeWarpMgr.GetCurrentValue(songPosition):0.###}\n";
+
+                    debugInfo += "\n";
+                    debugInfo += $"{bulletMgr.Bullets.Count} on screen\n";
+                    debugInfo += $"{bulletMgr.UpcomingShots.Count} upcoming shots\n";
+                    debugInfo += $"{bulletMgr.ActiveStreams.Count} active streams\n";
+
+                    debugInfo += "\n";
+                    debugInfo += $"{bulletMgr.TotalExited} exited total\n";
+                    debugInfo += $"{bulletMgr.Score} score ({bulletMgr.ScorePercent*100:0.00}%)\n";
+
+                    debugInfo += "\n";
+                    debugInfo += $"{particles.Count} particles\n";
+
+                    debugInfo += "\n";
+                    if (player.Invincibility == InvincibilityType.Eternal)
+                        debugInfo += "hax enabled";
+
+                    debugText.Text = debugInfo;
+                    debugText.Draw(spriteBatch);
+                });
+            }
+        }
+
+        private void RenderFlashlight(GraphicsDevice gd, DrawBatch drawBatch)
+        {
+            gd.SetRenderTarget(flashlightTarget);
+            gd.Clear(FlashlightVignette.BackgroundColor);
+            drawBatch.End();
+            drawBatch.BeginWithMySettings(ScreenTransform, null, true);
+            flashlight.Draw(drawBatch);
+            drawBatch.End();
+            gd.SetRenderTarget(null);
+            drawBatch.BeginWithMySettings(ScreenTransform, null);
+        }
+
+        private void DrawScoreScreen(DrawBatch drawBatch)
+        {
+            outerRings.Draw(drawBatch);
+            if (level.Info.HasBlackBackground)
+                drawBatch.DrawCircle(glowPen, arenaCircle.Center, arenaCircle.Radius);
+            arenaCircle.Draw(drawBatch);
+            scoreCircle.Draw(drawBatch);
+            particles.Draw(drawBatch);
+        }
+
+        private void DrawWithoutTransform(SpriteBatch spriteBatch, Action action)
+        {
+            spriteBatch.End();
+            spriteBatch.BeginWithMySettings(null, null);
+            action.Invoke();
+            spriteBatch.End();
+            spriteBatch.BeginWithMySettings(camera.Transform, null);
+        }
+
+        /// <summary>
+        /// Determines if the player should be drawn.
+        /// </summary>
+        private bool ShouldDrawPlayer() => !ActiveMod.Flags.HasFlag(ModFlags.Showcase)
+                || Mouse.GetState().RightButton == ButtonState.Pressed;
+
+        public enum ArenaState
+        {
+            Idle, Loading, Playing, Paused, ScoreScreen
+        }
+    }
+}

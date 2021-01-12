@@ -1,0 +1,8 @@
+<Project>
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="LevelPositionScreen" OutputPath="C:\Users\Daniel\Desktop" />
+  <Grid>
+    <Panel HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="0, 0, 0, 30">
+      <HorizontalSlider HorizontalAlignment="Center" Maximum="1" Width="500" Id="Position" />
+    </Panel>
+  </Grid>
+</Project>

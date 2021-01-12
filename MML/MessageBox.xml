@@ -1,0 +1,9 @@
+<Project>
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="MessageBox" OutputPath="C:\Users\Daniel\Desktop" />
+  <Window Title="NoisEvader" MinWidth="200" >
+    <VerticalStackPanel Spacing="10" Padding="5" Background="#ADADADFF" >
+      <Label Text="sample text" Id="Message" />
+      <TextButton Text="OK" MinWidth="70" HorizontalAlignment="Center" Id="Ok" />
+    </VerticalStackPanel>
+  </Window>
+</Project>

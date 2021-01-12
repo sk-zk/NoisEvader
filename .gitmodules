@@ -1,0 +1,10 @@
+[submodule "LilyPath"]
+	path = LilyPath
+	url = https://github.com/sk-zk/LilyPath
+[submodule "Myra"]
+	path = Myra
+	url = https://github.com/rds1983/Myra
+[submodule "cscore"]
+	path = cscore
+	url = https://github.com/sk-zk/cscore.git
+	branch = netstandard

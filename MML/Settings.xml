@@ -1,0 +1,43 @@
+<Project StylesheetPath="../NoisEvaderShared_Core/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="Settings" OutputPath="C:\Users\Daniel\Desktop" />
+  <Window Title="Settings" IsDraggable="False" Left="366" Padding="10" >
+    <VerticalStackPanel>
+      <VerticalStackPanel.Proportions>
+        <Proportion Type="Fill" />
+        <Proportion Type="Auto" />
+      </VerticalStackPanel.Proportions>
+      <ScrollViewer ShowHorizontalScrollBar="False" VerticalAlignment="Top">
+        <VerticalStackPanel Spacing="5">
+          <Label Text="GAME" TextColor="#FFFFFFFF" StyleName="Header" Id="GameLabel" />
+          <CheckBox Text=" Draw player hitbox" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="DrawHitbox" />
+          <CheckBox Text=" Screen Shake on hit" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="ScreenShake" />
+          <Label Text="VIDEO" TextColor="#FFFFFFFF" StyleName="Header" Margin="0, 15, 0, 5" Id="GraphicsLabel" />
+          <Grid ColumnSpacing="20" RowSpacing="5">
+            <Label Text="Resolution:" TextColor="#FFFFFFFF" />
+            <ComboBox GridColumn="1" Id="Resolution" />
+            <Label Text="Window mode:" TextColor="#FFFFFFFF" GridRow="1" />
+            <ComboBox GridColumn="1" GridRow="1" Id="WindowMode" />
+            <Label Text="Scale mode:" TextColor="#FFFFFFFF" GridRow="2" />
+            <ComboBox GridColumn="1" GridRow="2" Id="ScaleMode" />
+          </Grid>
+          <CheckBox Text=" VSync" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="Vsync" />
+          <CheckBox Text=" Show FPS" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="ShowFps" />
+          <CheckBox Text=" Outer rings" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="DrawOuterRings" />
+          <CheckBox Text=" Glow effect" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="DrawGlow" />
+          <CheckBox Text=" Particles" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="DrawParticles" />
+          <CheckBox Text=" Stretchy cursor" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="StretchyPlayer" />
+          <Label Text="AUDIO" TextColor="#FFFFFFFF" StyleName="Header" Margin="0, 15, 0, 5" Id="AudioLabel" />
+          <Grid ColumnSpacing="5" RowSpacing="5">
+            <Label Text="Volume:" TextColor="#FFFFFFFF" />
+            <HorizontalSlider MinWidth="100" GridColumn="1" Id="MusicVolume" />
+            <Label Text="100" TextColor="#FFFFFFFF" GridColumn="2" Id="MusicVolumeLabel" />
+          </Grid>
+        </VerticalStackPanel>
+      </ScrollViewer>
+      <HorizontalStackPanel Spacing="5" HorizontalAlignment="Center" MinHeight="10" Margin="0, 10, 0, 0">
+        <TextButton Text="Back" TextColor="#FFFFFFFF" MinWidth="60" Padding="5" Id="Back" />
+        <TextButton Text="Save" TextColor="#FFFFFFFF" MinWidth="60" Padding="5" Id="Save" />
+      </HorizontalStackPanel>
+    </VerticalStackPanel>
+  </Window>
+</Project>

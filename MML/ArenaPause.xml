@@ -1,0 +1,8 @@
+<Project StylesheetPath="../NoisEvaderShared/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="ArenaPause" OutputPath="C:\Users\Daniel\Desktop" />
+  <VerticalStackPanel Spacing="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <TextButton Text="Restart" TextColor="#FFFFFFFF" StyleName="PauseScreenBtn" HorizontalAlignment="Center" Id="Restart" />
+    <TextButton Text="Resume" TextColor="#FFFFFFFF" StyleName="PauseScreenBtn" HorizontalAlignment="Center" Id="Continue" />
+    <TextButton Text="Quit" TextColor="#FFFFFFFF" StyleName="PauseScreenBtn" HorizontalAlignment="Center" Id="Exit" />
+  </VerticalStackPanel>
+</Project>

@@ -1,0 +1,69 @@
+<Project StylesheetPath="../NoisEvaderShared_Core/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="LevelSelect" OutputPath="C:\Users\Daniel\Desktop" />
+  <Grid ColumnSpacing="10" Padding="10">
+    <Grid.DefaultRowProportion Type="Fill" />
+    <Grid.ColumnsProportions>
+      <Proportion Type="Pixels" Value="530" />
+      <Proportion Type="Fill" />
+    </Grid.ColumnsProportions>
+    <VerticalStackPanel Spacing="8">
+      <VerticalStackPanel.Proportions>
+        <Proportion Type="Auto" />
+        <Proportion Type="Fill" />
+        <Proportion Type="Auto" />
+      </VerticalStackPanel.Proportions>
+      <Grid ColumnSpacing="8">
+        <Grid.ColumnsProportions>
+          <Proportion Type="Fill" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+        </Grid.ColumnsProportions>
+        <TextButton Text="Hide folders" TextColor="#FFFFFFFF" Toggleable="True" Padding="5" Id="HideFolders" />
+        <Label Text="Sort by:" HorizontalAlignment="Right" GridColumn="1" />
+        <ComboBox HorizontalAlignment="Right" GridColumn="2" Id="SortMode" />
+      </Grid>
+      <ScrollViewer ShowHorizontalScrollBar="False" Id="LevelScrollViewer" />
+      <TextButton Text="&lt; Back to title" TextColor="#FFFFFFFF" Padding="5" Id="Back" />
+    </VerticalStackPanel>
+    <VerticalStackPanel Spacing="8" HorizontalAlignment="Left" VerticalAlignment="Top" GridColumn="1" Id="LevelInfo">
+      <VerticalStackPanel Spacing="4">
+        <HorizontalStackPanel HorizontalAlignment="Left">
+          <Image VerticalAlignment="Center" Id="HeartImg" />
+          <Label Text="Title" AutoEllipsisMethod="Character" Id="Title" />
+        </HorizontalStackPanel>
+        <Label Text="Artist" AutoEllipsisMethod="Character" Id="Artist" />
+        <HorizontalStackPanel Spacing="5" HorizontalAlignment="Left">
+          <Label Text="OOOOO" Id="Difficulty" />
+          <Label Text="Subtitle" Id="Subtitle" />
+        </HorizontalStackPanel>
+        <HorizontalStackPanel HorizontalAlignment="Left">
+          <Label Text="2:34" Id="Length" />
+          <Label Text="NotBean" Id="Creator" />
+        </HorizontalStackPanel>
+        <TextButton Text="Play" TextColor="#FFFFFFFF" Padding="5" Id="Play" />
+        <HorizontalStackPanel Spacing="5" Padding="0, 2, 0, 0">
+          <TextButton Text="Mods" TextColor="#FFFFFFFF" Padding="5" Id="Mods" />
+          <TextButton Text="Level settings" TextColor="#FFFFFFFF" Padding="5" Id="LevelSettings" />
+        </HorizontalStackPanel>
+      </VerticalStackPanel>
+      <HorizontalStackPanel Spacing="8" Margin="0, 40, 0, 0">
+        <HorizontalStackPanel.Proportions>
+          <Proportion Type="Pixels" Value="300" />
+          <Proportion Type="Fill" />
+        </HorizontalStackPanel.Proportions>
+        <VerticalStackPanel>
+          <Label Text="Scores" StyleName="Header" Id="ScoresHeader" />
+          <ScrollViewer ShowHorizontalScrollBar="False">
+            <Grid RowSpacing="5" Id="ScoresContainer">
+              <Grid.DefaultColumnProportion Type="Pixels" Value="300" />
+            </Grid>
+          </ScrollViewer>
+        </VerticalStackPanel>
+        <VerticalStackPanel>
+          <Label Text="Details" StyleName="Header" Id="DetailsHeader" />
+          <Label Id="Playcount" />
+        </VerticalStackPanel>
+      </HorizontalStackPanel>
+    </VerticalStackPanel>
+  </Grid>
+</Project>

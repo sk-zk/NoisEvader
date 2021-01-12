@@ -1,0 +1,12 @@
+<Project StylesheetPath="../NoisEvaderShared_Core/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="LevelSettingsWindow" OutputPath="C:\Users\Daniel\Desktop" />
+  <Window Title="Level Settings" Left="382" Top="107" Padding="10">
+    <VerticalStackPanel Id="MainPanel">
+      <CheckBox Text=" Force 30 ticks/sec." TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="ThirtyTicks" />
+      <CheckBox Text=" Emulate Sdgr+ timewarp/spinrate calc." TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="NaiveWarp" />
+      <HorizontalSeparator Thickness="2" Padding="0, 5" />
+      <CheckBox Text=" Invert colors" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="InvertColors" />
+      <TextButton Text="OK" TextColor="#FFFFFFFF" Margin="0, 10, 0, 0" Padding="5" HorizontalAlignment="Center" Id="Ok" />
+    </VerticalStackPanel>
+  </Window>
+</Project>

@@ -1,0 +1,24 @@
+<Project StylesheetPath="../NoisEvaderShared_Core/Resources/default_ui_skin.xml">
+  <Project.ExportOptions Namespace="NoisEvader.UI" Class="ModWindow" OutputPath="C:\Users\Daniel\Desktop" />
+  <Window Title="Mods" Left="456" Top="80" Padding="10">
+    <VerticalStackPanel Id="MainPanel">
+      <CheckBox Text=" Showcase" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="Showcase" />
+      <CheckBox Text=" Zen" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="Zen" />
+      <HorizontalSeparator Thickness="2" Padding="0, 5" />
+      <HorizontalStackPanel Spacing="5">
+        <HorizontalStackPanel.Proportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Pixels" Value="80" />
+          <Proportion Type="Auto" />
+        </HorizontalStackPanel.Proportions>
+        <CheckBox ImageWidth="16" ImageHeight="16" Id="ChangeGameSpeed" />
+        <HorizontalSlider Minimum="0.5" Maximum="1.5" Value="1" Height="16" VerticalAlignment="Center" Id="GameSpeed" />
+        <Label Text="1.0x" TextColor="#FFFFFFFF" Id="GameSpeedLabel" />
+      </HorizontalStackPanel>
+      <HorizontalSeparator Thickness="2" Padding="0, 5" />
+      <CheckBox Text=" Flashlight" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="Flashlight" />
+      <CheckBox Text=" Live" TextColor="#FFFFFFFF" ImageWidth="16" ImageHeight="16" Id="Live" />
+      <TextButton Text="OK" TextColor="#FFFFFFFF" Margin="0, 10, 0, 0" Padding="5" HorizontalAlignment="Center" Id="Ok" />
+    </VerticalStackPanel>
+  </Window>
+</Project>

@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NoisEvaderShared", "NoisEvaderShared_Core\NoisEvaderShared.shproj", "{4388D3AD-61F1-4B73-89B3-397DE59E285E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoisEvader_Win", "NoisEvader_Win\NoisEvader_Win.csproj", "{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoisEvader_Linux", "NoisEvader_Linux\NoisEvader_Linux.csproj", "{A1685534-3405-47F4-A91F-9BF7185685C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.MonoGame", "Myra\src\Myra\Myra.MonoGame.csproj", "{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LilyPath", "LilyPath\LilyPath\LilyPath.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSCore", "cscore\CSCore\CSCore.csproj", "{C859471C-B54E-43FF-9B3E-24AF4A90A029}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSCore.Ffmpeg", "cscore\CSCore.Ffmpeg\CSCore.Ffmpeg.csproj", "{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		LilyPath\LilyPath\LilyPath.projitems*{1a400385-bd3d-4f9b-90cf-1ea2b19d4ed9}*SharedItemsImports = 5
+		NoisEvaderShared_Core\NoisEvaderShared_Core.projitems*{1a400385-bd3d-4f9b-90cf-1ea2b19d4ed9}*SharedItemsImports = 5
+		NoisEvaderShared_Core\NoisEvaderShared_Core.projitems*{4388d3ad-61f1-4b73-89b3-397de59e285e}*SharedItemsImports = 13
+		LilyPath\LilyPath\LilyPath.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+		LilyPath\LilyPath\LilyPath.projitems*{a1685534-3405-47f4-a91f-9bf7185685c5}*SharedItemsImports = 5
+		NoisEvaderShared_Core\NoisEvaderShared_Core.projitems*{a1685534-3405-47f4-a91f-9bf7185685c5}*SharedItemsImports = 5
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A400385-BD3D-4F9B-90CF-1EA2B19D4ED9}.Release|x86.Build.0 = Release|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1685534-3405-47F4-A91F-9BF7185685C5}.Release|x86.Build.0 = Release|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C5398D9-F31F-4A88-9E1D-581A5C2A69CF}.Release|x86.Build.0 = Release|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Debug|x86.Build.0 = Debug|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Release|x86.ActiveCfg = Release|Any CPU
+		{C859471C-B54E-43FF-9B3E-24AF4A90A029}.Release|x86.Build.0 = Release|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDA433B1-2445-4F17-BD6C-9D5AD33A19DB}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0F9A392F-990C-4AB9-B4F2-2B450742BB31}
+	EndGlobalSection
+EndGlobal
