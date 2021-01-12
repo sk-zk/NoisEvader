@@ -1,4 +1,4 @@
-NoisEvader is a FOSS recreation of the musical bullet hell game Soundodger+.
+## NoisEvader
 
 <table border="0px">
  <tr>
@@ -7,6 +7,8 @@ NoisEvader is a FOSS recreation of the musical bullet hell game Soundodger+.
    <td><img src="https://github.com/sk-zk/NoisEvader/blob/master/screen3.png"></td>
   </tr>
 </table>
+
+**NoisEvader** is a FOSS recreation of the musical bullet hell game Soundodger+.
 
 With Soundodger 2 actually happening after all, this project is not all that interesting anymore, but I'll continue development anyway
 in case I come up with something I can do with this in the future.
