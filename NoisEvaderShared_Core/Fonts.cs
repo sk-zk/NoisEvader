@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpriteFontPlus;
 using FontStashSharp;
 
 namespace NoisEvader

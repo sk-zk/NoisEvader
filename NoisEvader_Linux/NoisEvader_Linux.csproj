@@ -53,7 +53,6 @@
     <PackageReference Include="MonoGame.Extended.Input" Version="3.8.0" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
     <PackageReference Include="NLog" Version="4.7.3" />
-    <PackageReference Include="SpriteFontPlus" Version="0.8.1.40" />
     <PackageReference Include="Svg" Version="3.1.1" />
     <PackageReference Include="XNAssets" Version="0.5.1.14" />
   </ItemGroup>
