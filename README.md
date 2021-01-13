@@ -16,6 +16,8 @@ in case I come up with something I can do with this in the future.
 At the moment, the main goal is to accurately recreate level playback, including glitches / unintentional behavior such as error bullets
 or decimal spawners. There is also a 30fps mode for levels that require it ("lasers" work, but flicker a lot).
 
+(There are no levels included with this game, so you need to bring your own.)
+
 ## Known issues
 The bigger ones, anyway:
 * The UI is, uh, well, it exists, I suppose.
