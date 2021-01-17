@@ -31,8 +31,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)LiveSpawners.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LocalScores.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Piece.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PiecewiseFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PointHitbox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PolynomialFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Replays\Replay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Replays\ReplayArena.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Replays\ReplayingPlayer.cs" />

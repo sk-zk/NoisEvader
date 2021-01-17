@@ -132,8 +132,12 @@ namespace NoisEvader
             catch (Exception ex)
             {
                 logger.Error(ex, "Level failed to load");
+#if DEBUG
+                throw;
+#else
                 SwitchToLevelSelectScreen();
                 ShowErrorMessage("The level failed to load.\nCheck the game log for details.");
+#endif
             }
         }
 

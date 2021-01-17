@@ -25,9 +25,9 @@ namespace NoisEvader
             this.endRadius = endRadius;
         }
 
-        public override void Update(LevelTime levelTime, float spawnerSpeed)
+        public override void Update(LevelTime levelTime)
         {
-            base.Update(levelTime, spawnerSpeed);
+            base.Update(levelTime);
 
             var progress = (Angle - startAngle) / (endAngle - startAngle);
             progress = MathHelper.Clamp(progress, 0, 1);

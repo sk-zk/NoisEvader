@@ -40,6 +40,7 @@ namespace NoisEvader
         protected double currentTimeWarp;
         protected TimeWarps spinRate;
         protected double currentSpinRate;
+        protected PiecewiseFunction combinedSpinWarpFunction;
 
         private AudioPlayer Audio => AudioPlayer.Instance;
         protected double songPosition;
@@ -209,12 +210,14 @@ namespace NoisEvader
             player.Position = Vector2.Zero;
             player.BorderColor = level.Info.Colors.Outline;
 
+            timeWarp = new TimeWarps(level.Script.TimeWarpNodes);
+            spinRate = new TimeWarps(level.Script.SpinRateNodes);
+            combinedSpinWarpFunction = new PiecewiseFunction(level.Script.TimeWarpNodes)
+                * new PiecewiseFunction(level.Script.SpinRateNodes);
+
             InitSpawners();
 
             bulletMgr = new BulletManager(arena, level, spawners.Spawners, mod, particles);
-
-            timeWarp = new TimeWarps(level.Script.TimeWarpNodes);
-            spinRate = new TimeWarps(level.Script.SpinRateNodes);
 
             if (mod.Flags.HasFlag(ModFlags.Flashlight))
             {
@@ -246,9 +249,9 @@ namespace NoisEvader
         protected virtual void InitSpawners()
         {
             if (ActiveMod.Flags.HasFlag(ModFlags.Live))
-                spawners = new LiveSpawners(arena);
+                spawners = new LiveSpawners(arena, combinedSpinWarpFunction);
             else
-                spawners = new ArenaSpawners(arena);
+                spawners = new ArenaSpawners(arena, combinedSpinWarpFunction);
             spawners.CreateSpawners(level);
             spawners.CreateIndicatorList(level);
         }

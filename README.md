@@ -24,7 +24,6 @@ The bigger ones, anyway:
 * Exclusive fullscreen causes all sorts of problems, especially under DirectX, so Borderless is recommended.
 * Soundodger+ appears to apply a seemingly random audio offset to each audio file. I don't know where that comes from
 or how to compensate for it, which means you're stuck with the offset for now.
-* Timestep is a never-ending source of fun so replays don't really work all that well yet.
 * The Linux build has no AA. This will be fixed with the next MonoGame release.
 
 ## Dependencies

@@ -12,11 +12,6 @@ namespace NoisEvader
             // do nothing
         }
 
-        protected override void UpdateAngle(float spawnerSpeed)
-        {
-            // do nothing
-        }
-
         protected override void UpdateFlares(LevelTime levelTime)
         {
             for (int i = 0; i < ActiveFlares.Count; i++)

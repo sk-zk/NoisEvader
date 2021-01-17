@@ -9,7 +9,7 @@ namespace NoisEvader
 {
     public class TimeWarps
     {
-        public List<TsVal<float>> Nodes { get; set; }
+        public List<TsVal<float>> Nodes { get; private set; }
 
         public TimeWarps(List<TsVal<float>> nodes)
         {
@@ -117,4 +117,5 @@ namespace NoisEvader
             return MathHelper.Lerp(rateStart.Value, rateEnd.Value, progress);
         }
     }
+
 }

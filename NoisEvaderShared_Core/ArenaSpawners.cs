@@ -10,16 +10,19 @@ namespace NoisEvader
     public class ArenaSpawners
     {
         public List<Spawner> Spawners { get; protected set; } = new List<Spawner>();
+        protected double[] spawnerAngles;
+        private float distBetweenSpawners;
 
         protected ArenaCircle arena;
 
-        private float distBetweenSpawners;
+        protected PiecewiseFunction combinedSpinWarpFunction;
         private double songPosition;
         protected bool useCenterSpawnerGlitch;
 
-        public ArenaSpawners(ArenaCircle arena)
+        public ArenaSpawners(ArenaCircle arena, PiecewiseFunction combinedSpinWarpFunction)
         {
             this.arena = arena;
+            this.combinedSpinWarpFunction = combinedSpinWarpFunction;
         }
 
         public void CreateSpawners(SoundodgerLevel level)
@@ -70,14 +73,17 @@ namespace NoisEvader
             // conveniently, this behaviour emerges naturally from the code
             // i'd already written, so I didn't have to change much.
             var ceil = (int)Math.Ceiling(amount);
+            spawnerAngles = new double[ceil];
             distBetweenSpawners = (float)(2 * Math.PI / amount);
             for (int i = 0; i < ceil; i++)
             {
-                Spawners[i].Angle = (i * distBetweenSpawners);
+                var angle = (i * distBetweenSpawners);
                 if (!useCenterSpawnerGlitch)
                 {
-                    Spawners[i].Angle -= MathHelper.ToRadians(90);
+                    angle -= MathHelper.ToRadians(90);
                 }
+                Spawners[i].Angle = angle;
+                spawnerAngles[i] = angle;
             }
         }
 
@@ -126,19 +132,35 @@ namespace NoisEvader
         {
             songPosition = levelTime.SongPosition; // used in draw call
 
-            var spawnerSpeed = CalcSpawnerSpeed(levelTime);
-            foreach (var spawner in Spawners)
+            /* I'm either insane or insanely brilliant, but it's probably the former.
+               The problem: Replays kept desyncing because spawner movement was still
+                 framerate-dependent due to accumulating floating point errors
+                 (or something like that).
+               A normal person would've just locked the update loop to n ticks/s
+                 and called it a day, but in MonoGame, as far as I'm aware,
+                 that also caps the framerate at n fps, and I didn't want to do that.
+               Instead, I decided to calculate the spawner positions independent of
+                 game state to sidestep this problem.
+               To do this, I turn the SR and TW node lists into piecewise functions,
+                 multiply them to get a combined movement function, and then,
+                 for each frame, multiply the rotation/ms factor by the integral
+                 of that function between 0 and the current song position.
+               This appears to have sorted out my issues for the most part. Spawner
+                 movement still varies a little bit in moments with high SR*TW values,
+                 but since these variances don't accumulate anymore, it always
+                 catches itself when the rotation slows down.
+            */
+            var totalIntegral = combinedSpinWarpFunction.IntegralTo(songPosition);
+            for (int i = 0; i < Spawners.Count; i++)
             {
+                var spawner = Spawners[i];
                 if (spawner.IsStillInUse(levelTime.SongPosition) || spawner.ActiveFlares.Count > 0)
-                    spawner.Update(levelTime, (float)spawnerSpeed);
+                {
+                    spawner.Angle = (float)(spawnerAngles[i] 
+                        + MathEx.WrapAngle(totalIntegral * Spawner.RotationPerMs));
+                    spawner.Update(levelTime);
+                }
             }
-        }
-
-        private double CalcSpawnerSpeed(LevelTime levelTime)
-        {
-            return levelTime.LevelElapsedMs
-                * levelTime.SpinRate
-                * Spawner.RotationPerMs;
         }
 
         public void Draw(DrawBatch drawBatch)

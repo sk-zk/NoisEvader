@@ -10,7 +10,8 @@ namespace NoisEvader
         private readonly float liveModSpawnerZone = MathHelper.ToRadians(180);
         private readonly float liveModTransitionZone = MathHelper.ToRadians(14);
 
-        public LiveSpawners(ArenaCircle arena) : base(arena) { }
+        public LiveSpawners(ArenaCircle arena, PiecewiseFunction combinedSpinWarpFunction) 
+            : base(arena, combinedSpinWarpFunction) { }
 
         protected override Spawner ConstructSpawner(SoundodgerLevel level)
         {
@@ -24,6 +25,7 @@ namespace NoisEvader
         protected override void SetSpawnerAngles(double amount)
         {
             var ceil = (int)Math.Ceiling(amount);
+            spawnerAngles = new double[ceil];
 
             float angle;
             float distBetweenSpawners;
@@ -37,6 +39,7 @@ namespace NoisEvader
             {
                 var spawner = (LiveSpawner)Spawners[i];
                 spawner.Angle = i * distBetweenSpawners - startAngle;
+                spawnerAngles[i] = spawner.Angle;
                 spawner.ActiveZone = angle;
                 spawner.TransitionZone = liveModTransitionZone;
             }

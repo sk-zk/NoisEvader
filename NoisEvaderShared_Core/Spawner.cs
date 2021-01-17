@@ -20,14 +20,13 @@ namespace NoisEvader
         /// </summary>
         public const double RotationPerMs = 30.0 * MathEx.DegToRad / 1000.0;
 
-        private float angle;
+        protected float angle;
         public float Angle
         {
             get => angle;
             set
             {
-                angle = MathHelper.WrapAngle(value);
-                CalcPosition(Arena);
+                SetAngle(value);
             }
         }
 
@@ -60,6 +59,19 @@ namespace NoisEvader
             CalcPosition(Arena);
         }
 
+        protected virtual void SetAngle(float value)
+        {
+            angle = value;
+            WrapAngle();
+            CalcPosition(Arena);
+        }
+
+        protected void WrapAngle()
+        {
+            if (Math.Abs(angle) > 50.2654f) // 8*360
+                angle = MathHelper.WrapAngle(angle);
+        }
+
         protected virtual void CalcPosition(ArenaCircle arena)
         {
             var touchRadius = arena.Circle.Radius + Radius;
@@ -80,17 +92,10 @@ namespace NoisEvader
             indicator.AddToIndicatorList(shotLaunchTime, color);
         }
 
-        public virtual void Update(LevelTime levelTime, float spawnerSpeed)
+        public virtual void Update(LevelTime levelTime)
         {
-            UpdateAngle(spawnerSpeed);
-
-            if (Math.Abs(angle) > 50.2654f) // 8*360
-                angle = MathHelper.WrapAngle(angle);
-
-            CalcPosition(Arena);
-
+            WrapAngle();
             indicator.Update(levelTime);
-
             UpdateFlares(levelTime);
         }
 
@@ -106,11 +111,6 @@ namespace NoisEvader
                 }
                 ActiveFlares[i].Update(levelTime, Angle);
             }
-        }
-
-        protected virtual void UpdateAngle(float spawnerSpeed)
-        {
-            angle += spawnerSpeed;
         }
 
         public override void Draw(DrawBatch drawBatch)
