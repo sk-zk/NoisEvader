@@ -20,6 +20,11 @@ namespace NoisEvader
 
         public double F(double x)
         {
+            if (Degree == 0)
+            {
+                return Coefficients[0];
+            }
+
             double result = Coefficients[0];
             for (int i = 1; i < Coefficients.Length; i++)
             {
@@ -56,6 +61,11 @@ namespace NoisEvader
         /// <returns></returns>
         public double IntegralBetween(double a, double b)
         {
+            if (Degree == 0)
+            {
+                return (b - a) * Coefficients[0];
+            }
+
             if (Degree == 1)
             {
                 double deltaT = b - a;
