@@ -209,8 +209,8 @@ namespace NoisEvader
         {
             gameState = GameState.Menu;
             Desktop.Root.Visible = true;
-            if (score != null && score.HeartGotten)
-                levelSelectScreen.PlayerGotHeartOnSelected();
+            if (score != null)
+                levelSelectScreen.UpdateCachedDataOfSelected(score);
             SwitchToLevelSelectScreen();
         }
 

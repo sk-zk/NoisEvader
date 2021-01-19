@@ -258,6 +258,16 @@ namespace NoisEvader.UI
             levelBox.UpdateSelected();
         }
 
+        public void UpdateCachedDataOfSelected(Score score)
+        {
+            CachedLevelData level = levelBox.SelectedLevel;
+            if (score.HeartGotten)
+                level.HeartGotten = true;
+            if (level.BestScore is null || score.Percent > level.BestScore)
+                level.BestScore = score.Percent;
+            levelBox.UpdateSelected();
+        }
+
         private void ShowLocalScores(CachedLevelData level)
         {
             ScoresContainer.Widgets.Clear();

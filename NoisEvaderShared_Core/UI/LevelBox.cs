@@ -87,12 +87,6 @@ namespace NoisEvader.UI
 
         public void Update()
         {
-            // Loading another folder straight from the doubleclick event handler
-            // isn't possible because it deletes the widgets Myra is currently
-            // processing the event on and dies.
-            // To work around this, I set a flag to load the levels from the
-            // Update method (rather than the Draw method, during which all
-            // Myra-related stuff happens).
             if (loadLevelFolderOnUpdate)
             {
                 LoadLevels(LevelFolder);
@@ -331,7 +325,7 @@ namespace NoisEvader.UI
             if (selectedItem != null) 
             {
                 var selectedIdx = LevelPanel.Widgets.IndexOf(selectedItem);
-                selectedItem = new LevelBoxLevel(SelectedLevel);
+                selectedItem = CreateLevelButton(SelectedLevel);
                 LevelPanel.Widgets[selectedIdx] = selectedItem;
             }
         }
