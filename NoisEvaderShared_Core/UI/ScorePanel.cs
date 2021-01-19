@@ -30,14 +30,18 @@ namespace NoisEvader.UI
             MouseEntered += (_, __) => Background = hoverBackground;
             MouseLeft += (_, __) => Background = background;
 
+            var smallerFont = Fonts.Orkney.GetFont(Fonts.PtToPx(13));
+
             var scoreHeartPanel = new HorizontalStackPanel();
             Widgets.Add(scoreHeartPanel);
 
-            if (levelHasHeart && score.HeartGotten)
+            if (levelHasHeart)
             {
                 var heart = new Image();
                 UIUtil.SetHeart(heart, 18);
-                heart.Renderable = LevelSelect.HeartIcon;
+                heart.Renderable = score.HeartGotten
+                    ? LevelSelect.HeartIcon 
+                    : LevelSelect.HeartOutlineIcon;
                 scoreHeartPanel.Widgets.Add(heart);
             }
 
@@ -48,11 +52,18 @@ namespace NoisEvader.UI
 
             scoreHeartPanel.Widgets.Add(scoreTxt);
 
+            var hits = new Label
+            {
+                Text = $"{score.TotalHits} hits",
+                Font = smallerFont,
+            };
+            Widgets.Add(hits);
+                
             var date = new Label
             {
                 Text = score.Time.ToLocalTime().ToString(CultureInfo.InstalledUICulture),
                 TextColor = Color.DimGray,
-                Font = Fonts.Orkney.GetFont(Fonts.PtToPx(13)),
+                Font = smallerFont,
             };
             Widgets.Add(date);
         }
