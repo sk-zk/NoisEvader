@@ -11,7 +11,7 @@ namespace NoisEvader
     public class Tweener
     {
         /// <summary>
-        /// Determines if the animation is currently updating.
+        /// Determines if the tweener is currently updating.
         /// </summary>
         public bool Enabled { get; set; }
 
@@ -26,7 +26,7 @@ namespace NoisEvader
         public float End { get; private set; }
 
         /// <summary>
-        /// The duration of the animation.
+        /// The duration of the tween.
         /// </summary>
         public float Duration { get; private set; }
 
@@ -41,7 +41,7 @@ namespace NoisEvader
         public float Progress => MathHelper.Clamp(Elapsed / Duration, 0, 1);
 
         /// <summary>
-        /// How much time has passed since the animation started.
+        /// How much time has passed since the tween started.
         /// </summary>
         public float Elapsed { get; private set; }
 
@@ -51,7 +51,7 @@ namespace NoisEvader
         public Func<float, float> Interpolation { get; set; }
 
         /// <summary>
-        /// Whether or not the animation repeats.
+        /// Whether or not the tween repeats.
         /// </summary>
         public bool Repeat { get; set; }
 
@@ -61,7 +61,7 @@ namespace NoisEvader
         public float RepeatDelay { get; set; }
 
         /// <summary>
-        /// TODO: xmldoc
+        /// Creates a new tweener with the given interpolation function.
         /// </summary>
         /// <param name="interpolation">The relative interpolation / easing function to use.</param>
         public Tweener(Func<float, float> interpolation)
@@ -70,7 +70,7 @@ namespace NoisEvader
         }
 
         /// <summary>
-        /// Starts an animation.
+        /// Starts a tween.
         /// </summary>
         /// <param name="startVal">Starting value.</param>
         /// <param name="endVal">End value.</param>
@@ -93,10 +93,6 @@ namespace NoisEvader
             Animate(startVal, endVal, duration, 0, false, 0);
         }
 
-        /// <summary>
-        /// Update the animation.
-        /// </summary>
-        /// <param name="elapsedMs">Elapsed game time in ms.</param>
         public void Update(float elapsedMs)
         {
             if (!Enabled)
