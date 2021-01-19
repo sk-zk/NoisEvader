@@ -18,17 +18,8 @@ namespace NoisEvader.UI
 
             var heartAndTitle = new HorizontalStackPanel();
             heartAndTitle.GridRow = gridRow++;
+            heartAndTitle.Proportions.Add(new Proportion(ProportionType.Fill));
             Widgets.Add(heartAndTitle);
-
-            if (level.Info.HasHeart)
-            {
-                var heart = new Image();
-                UIUtil.SetHeart(heart, 18);
-                heart.Renderable = level.HeartGotten
-                    ? LevelSelect.HeartIcon
-                    : LevelSelect.HeartOutlineIcon;
-                heartAndTitle.Widgets.Add(heart);
-            }
 
             var title = new Label
             {
@@ -40,15 +31,40 @@ namespace NoisEvader.UI
             };
             heartAndTitle.Widgets.Add(title);
 
+            if (level.Info.HasHeart)
+            {
+                var heart = new Image();
+                UIUtil.SetHeart(heart, 18);
+                heart.Renderable = level.HeartGotten
+                    ? LevelSelect.HeartIcon
+                    : LevelSelect.HeartOutlineIcon;
+                heartAndTitle.Widgets.Add(heart);
+            }
+
+
+            var artistAndScore = new HorizontalStackPanel();
+            artistAndScore.Proportions.Add(new Proportion(ProportionType.Fill));
+            artistAndScore.GridRow = gridRow++;
+            Widgets.Add(artistAndScore);
+
             var artist = new Label
             {
-                GridRow = gridRow++,
-                Width = Width - 5,
                 AutoEllipsisMethod = AutoEllipsisMethod.Character,
                 Font = Fonts.OrkneyWithFallback.GetFont(20),
                 Text = level.Info.Artist,
             };
-            Widgets.Add(artist);
+            artistAndScore.Widgets.Add(artist);
+
+            if (level.BestScore.HasValue)
+            {
+                var score = new Label
+                {
+                    Font = Fonts.OrkneyWithFallback.GetFont(20),
+                    Text = $"{level.BestScore:0%}",
+                };
+                artistAndScore.Widgets.Add(score);
+            }
+
 
             var diffAndSubtitle = new HorizontalStackPanel
             {

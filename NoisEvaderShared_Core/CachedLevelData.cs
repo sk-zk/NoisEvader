@@ -17,6 +17,8 @@ namespace NoisEvader
 
         public int Playcount { get; set; }
 
+        public float? BestScore { get; set; }
+
         public bool HeartGotten { get; set; }
 
         public LevelSettings Settings { get; set; } = default;

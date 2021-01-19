@@ -35,21 +35,29 @@ namespace NoisEvader
 
         public static CachedLevelData GetLevelData(string xmlHash)
         {
-            return DoQuery(command => {
-                command.CommandText =
-                    @"SELECT 
+            return DoQuery(command =>
+            {
+                command.CommandText = @"
+                    WITH level_scores AS 
+                       (SELECT s.percent, s.heart_gotten, s.mod_game_speed
+                       FROM level_data l JOIN scores s
+                       ON l.level_id = s.level_id
+                       WHERE l.hash = $hash)
+                    SELECT
                         d.*,
+                        (SELECT percent
+                            FROM level_scores
+                            WHERE mod_game_speed >= 1
+                            ORDER BY percent DESC LIMIT 1) AS best_score,
                         (SELECT COUNT(1)
-                           FROM level_data JOIN scores 
-                           ON level_data.level_id = scores.level_id
-                           WHERE level_data.hash = $hash
-                           AND scores.heart_gotten = '1') AS heart_gotten,
+                            FROM level_scores
+                            WHERE heart_gotten = '1') AS heart_gotten,
                         IFNULL(s.invert_colors, 'false') AS invert_colors,
                         IFNULL(s.thirty_ticks, 'false') AS thirty_ticks,
                         IFNULL(s.naive_warp, 'false') AS naive_warp
-                    FROM
+                     FROM
                         level_data d LEFT JOIN level_settings s ON d.level_id = s.level_id
-                    WHERE d.hash = $hash";
+                     WHERE d.hash = $hash";
                 command.Parameters.AddWithValue("$hash", xmlHash);
 
                 using var reader = command.ExecuteReader();
@@ -71,10 +79,15 @@ namespace NoisEvader
                     cld.Info.HasHeart = reader.GetBoolean(reader.GetOrdinal("has_heart"));
                     cld.Info.AudioPreviewPoint = reader.GetInt32(reader.GetOrdinal("audio_preview_point"));
                     cld.Info.AdvancedFlag = reader.GetBoolean(reader.GetOrdinal("advanced_flag"));
-                    cld.AudioDuration = reader.IsDBNull(reader.GetOrdinal("audio_duration"))
+                    var audioDurationOrdinal = reader.GetOrdinal("audio_duration");
+                    cld.AudioDuration = reader.IsDBNull(audioDurationOrdinal)
                         ? null
-                        : (TimeSpan?)TimeSpan.FromMilliseconds(reader.GetDouble(reader.GetOrdinal("audio_duration")));
+                        : (TimeSpan?)TimeSpan.FromMilliseconds(reader.GetDouble(audioDurationOrdinal));
                     cld.Playcount = reader.GetInt32(reader.GetOrdinal("playcount"));
+                    var scoreOrdinal = reader.GetOrdinal("best_score");
+                    cld.BestScore = reader.IsDBNull(scoreOrdinal)
+                        ? null
+                        : reader.GetFloat(scoreOrdinal);
                     cld.HeartGotten = reader.GetInt32(reader.GetOrdinal("heart_gotten")) > 0;
 
                     var settings = new LevelSettings
