@@ -30,7 +30,7 @@ namespace NoisEvader.UI
             (x, y) => Comparer<int>.Default.Compare(x.Playcount, y.Playcount) * Descending;
 
         private static ComparerFunction scoreComparer =
-            (x, y) => Comparer<int>.Default.Compare(0, 0); // TODO
+            (x, y) => Comparer<float>.Default.Compare(x.BestScore ?? -1f, y.BestScore ?? -1f) * Descending;
 
         public class SortDict : Dictionary<SortType, ComparerFunction[]> { }
         private static readonly SortDict Sorts = new SortDict()
