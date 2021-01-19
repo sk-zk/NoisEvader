@@ -209,12 +209,12 @@ namespace NoisEvader
                 command.CommandText =
                 @"INSERT INTO scores
                     (level_id, 
-                    time, percent, total_hits, heart_gotten,
+                    time, percent, total_hits, heart_gotten, total_slomo,
                     mod_flags, mod_game_speed, mod_tick_rate,
                     replay_file)
                  VALUES
                     ((SELECT level_id FROM level_data WHERE hash = $hash),
-                    $time, $percent, $total_hits, $heart_gotten,
+                    $time, $percent, $total_hits, $heart_gotten, $total_slomo,
                     $mod_flags, $mod_game_speed, $mod_tick_rate,
                     $replay_file)
                 ";
@@ -223,6 +223,7 @@ namespace NoisEvader
                 command.Parameters.AddWithValue("$percent", score.Percent);
                 command.Parameters.AddWithValue("$total_hits", score.TotalHits);
                 command.Parameters.AddWithValue("$heart_gotten", score.HeartGotten);
+                command.Parameters.AddWithValue("$total_slomo", score.TotalSlomoTime);
                 command.Parameters.AddWithValue("$mod_flags", score.Mod.Flags);
                 command.Parameters.AddWithValue("$mod_game_speed", score.Mod.GameSpeed);
                 if (score.Mod.TickRate is { } tr)
@@ -253,6 +254,7 @@ namespace NoisEvader
                         Percent = reader.GetFloat(reader.GetOrdinal("percent")),
                         TotalHits = (uint)reader.GetInt32(reader.GetOrdinal("total_hits")),
                         HeartGotten = reader.GetBoolean(reader.GetOrdinal("heart_gotten")),
+                        TotalSlomoTime = reader.GetFloat(reader.GetOrdinal("total_slomo")),
                         ReplayFile = reader.GetString(reader.GetOrdinal("replay_file")),
                     };
                     score.Mod = new Mod()

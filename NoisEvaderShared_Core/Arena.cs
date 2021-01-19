@@ -75,6 +75,8 @@ namespace NoisEvader
         }
 
         private bool slomo;
+        private double slomoStart;
+        private double totalSlomoTime;
 
         public Color BackgroundColor
         {
@@ -561,17 +563,27 @@ namespace NoisEvader
             prevSongPosition = songPosition - step;
         }
 
-        protected void SetSlomo(bool slomo)
+        protected void SetSlomo(bool newSlomo)
         {
-            this.slomo = slomo;
+            if (slomo == newSlomo)
+                return;
+
+            var prevSlomo = slomo;
+            slomo = newSlomo;
             Audio.PlaybackSpeed = GameSpeed;
 
             replayRecorder?.AddSlomo(slomo);
 
             if (slomo)
+            {
+                slomoStart = songPosition;
                 camera.SlomoZoomIn();
+            }
             else
+            {
+                totalSlomoTime += songPosition - slomoStart;
                 camera.SlomoZoomOut();
+            }
         }
 
         protected virtual void UpdatePlayer(LevelTime levelTime)
@@ -683,6 +695,7 @@ namespace NoisEvader
                         Mod = ActiveMod,
                         HeartGotten = p.HasHeart,
                         TotalHits = p.TotalHits,
+                        TotalSlomoTime = (float)totalSlomoTime,
                         ReplayFile = replayFilename,
                     };
                     Task.Run(() =>

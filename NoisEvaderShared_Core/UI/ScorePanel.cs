@@ -58,7 +58,14 @@ namespace NoisEvader.UI
                 Font = smallerFont,
             };
             Widgets.Add(hits);
-                
+
+            var slomoTime = new Label
+            {
+                Text = $"{score.TotalSlomoTime/1000:0.##}s of slomo",
+                Font = smallerFont,
+            };
+            Widgets.Add(slomoTime);
+
             var date = new Label
             {
                 Text = score.Time.ToLocalTime().ToString(CultureInfo.InstalledUICulture),

@@ -10,6 +10,7 @@ namespace NoisEvader
         public uint TotalHits { get; set; }
         public Mod Mod { get; set; }
         public bool HeartGotten { get; set; }
+        public float TotalSlomoTime { get; set; }
 
         public string ReplayFile { get; set; }
     }

@@ -11,8 +11,7 @@ CREATE TABLE IF NOT EXISTS
 
 -- Table: scores
 CREATE TABLE IF NOT EXISTS 
-	scores (score_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, level_id INTEGER REFERENCES level_data (level_id) NOT NULL, time DATETIME, percent DOUBLE, total_hits INT, heart_gotten BOOLEAN, mod_flags INT, mod_game_speed DOUBLE, mod_tick_rate DOUBLE, replay_file TEXT);
-
+	scores (score_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, level_id INTEGER REFERENCES level_data (level_id) NOT NULL, time DATETIME, percent DOUBLE, total_hits INT, heart_gotten BOOLEAN, total_slomo DOUBLE DEFAULT (0.0), mod_flags INT, mod_game_speed DOUBLE, mod_tick_rate DOUBLE, replay_file TEXT);
 -- Index: hash_idx
 CREATE UNIQUE INDEX IF NOT EXISTS 
 	hash_idx ON level_data (level_id COLLATE NOCASE);
