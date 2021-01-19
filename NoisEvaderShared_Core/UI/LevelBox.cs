@@ -195,12 +195,15 @@ namespace NoisEvader.UI
             ScrollViewer parent = Parent as ScrollViewer;
 
             // calculate Y position of the item
-            var scrollPos = (Spacing * itemIndex) + FolderPanel.Measure(Point.Zero).Y;
+            int scrollPos = 0;
+            if (!HideFolders)
+                scrollPos += FolderPanel.Measure(Point.Zero).Y;
+
             for (int i = 0; i < itemIndex; i++)
-                scrollPos += LevelPanel.Widgets[i].Measure(Point.Zero).Y;
+                scrollPos += LevelPanel.Spacing + LevelPanel.Widgets[i].Measure(Point.Zero).Y;
 
             // center item in box
-            scrollPos -= (parent.Bounds.Height / 2)
+            scrollPos -= (parent.ActualBounds.Height / 2)
                 - LevelPanel.Widgets[itemIndex].Measure(Point.Zero).Y / 2;
 
             // clamp scroll at the edges
