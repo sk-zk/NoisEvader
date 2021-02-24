@@ -8,7 +8,7 @@
   </tr>
 </table>
 
-**NoisEvader** is a FOSS recreation of the musical bullet hell game Soundodger+.
+**NoisEvader** is a FOSS recreation of the bullet hell music game [Soundodger+](https://soundodger.com/plus/).
 
 With Soundodger 2 actually happening after all, I suppose this project is not really all that interesting anymore, but I'll continue development anyway
 in case I come up with something I can do with this in the future.
@@ -17,6 +17,13 @@ At the moment, the main goal is to accurately recreate level playback, including
 or decimal spawners. There is also a 30fps mode for levels that require it ("lasers" work, but flicker a lot).
 
 (There are no levels included with this game, so you need to bring your own.)
+
+## Features
+* 🦀 FLASH IS GONE 🦀
+* Replays
+* Gameplay modifiers
+* Linux support
+* More audio formats
 
 ## Known issues
 The bigger ones, anyway:
