@@ -6,7 +6,7 @@ namespace NoisEvader.UI
         {
             BuildUI();
             Message.Text = message;
-            Ok.Click += (_, __) => Close();
+            Ok.Click += (_, _) => Close();
         }
     }
 }

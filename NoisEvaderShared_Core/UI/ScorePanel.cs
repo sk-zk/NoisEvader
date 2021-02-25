@@ -27,8 +27,8 @@ namespace NoisEvader.UI
             Padding = new Thickness(5);
             Margin = new Thickness(0, 0, 5, 0);
             Background = background;
-            MouseEntered += (_, __) => Background = hoverBackground;
-            MouseLeft += (_, __) => Background = background;
+            MouseEntered += (_, _) => Background = hoverBackground;
+            MouseLeft += (_, _) => Background = background;
 
             var smallerFont = Fonts.Orkney.GetFont(Fonts.PtToPx(13));
 

@@ -145,7 +145,7 @@ namespace NoisEvader
             /* posScreen = new UI.LevelPositionScreen();
             posScreen.Position.ValueChangedByUser += PosScreenValueChanged; */
             scoreScreen = new UI.ScoreScreen();
-            scoreScreen.BackPressed += (_, __) => ExitToMenu();
+            scoreScreen.BackPressed += (_, _) => ExitToMenu();
 
             debugText = new SimpleText()
             {
@@ -159,7 +159,8 @@ namespace NoisEvader
         private void PosScreenValueChanged(object sender, Myra.Utility.ValueChangedEventArgs<float> e)
         {
             if (e.NewValue < Audio.Position)
-                    ResetEverything();
+                ResetEverything();
+
             SkipTo(e.NewValue * 1000);
         }
 

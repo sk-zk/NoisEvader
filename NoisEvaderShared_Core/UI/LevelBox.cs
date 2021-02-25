@@ -246,8 +246,8 @@ namespace NoisEvader.UI
                 var btn = new LevelBoxFolder(display);
                 btn.MouseEntered += Grid_MouseEntered;
                 btn.MouseLeft += Grid_MouseLeft;
-                btn.TouchDown += (_, __) => OnFolderClicked(btn);
-                btn.TouchDoubleClick += (_, __) =>
+                btn.TouchDown += (_, _) => OnFolderClicked(btn);
+                btn.TouchDoubleClick += (_, _) =>
                 {
                     if (prevSelectedItem == selectedItem)
                         OnFolderDoubleClicked(folder);
@@ -285,7 +285,7 @@ namespace NoisEvader.UI
             var btn = new LevelBoxLevel(level);
             btn.MouseEntered += Grid_MouseEntered;
             btn.MouseLeft += Grid_MouseLeft;
-            btn.TouchDown += (_, __) => OnLevelClicked(btn, level);
+            btn.TouchDown += (_, _) => OnLevelClicked(btn, level);
             return btn;
         }
 

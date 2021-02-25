@@ -283,7 +283,7 @@ namespace NoisEvader.UI
             {
                 var panel = new ScorePanel(scores[i], level.Info.HasHeart);
                 var replayFile = scores[i].ReplayFile;
-                panel.TouchDown += (_, __) =>
+                panel.TouchDown += (_, _) =>
                 {
                     if (!string.IsNullOrEmpty(replayFile))
                         ReplaySelected?.Invoke(panel, levelBox.SelectedLevel, replayFile);
