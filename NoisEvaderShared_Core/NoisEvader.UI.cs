@@ -21,8 +21,8 @@ namespace NoisEvader
         public static Desktop Desktop;
         private UI.MainMenu mainMenu;
         private UI.LevelSelect levelSelectScreen;
-        private UI.Settings settingsScreen;
         private UI.ArenaPause arenaPauseScreen;
+        private bool settingsOpen;
 
         private void InitGui()
         {
@@ -63,8 +63,6 @@ namespace NoisEvader
             levelSelectScreen.LevelSelected += LevelSelectScreen_LevelSelected;
             levelSelectScreen.ReplaySelected += LevelSelectScreen_ReplaySelected;
             Window.ClientSizeChanged += Window_ClientSizeChanged;
-
-            settingsScreen = new UI.Settings(graphics);
 
             arenaPauseScreen = new UI.ArenaPause();
             arenaPauseScreen.ContinuePressed += ArenaPauseScreen_ContinuePressed;
@@ -180,6 +178,12 @@ namespace NoisEvader
 
         private void ShowSettings()
         {
+            if (settingsOpen)
+                return;
+
+            settingsOpen = true;
+            var settingsScreen = new UI.Settings(graphics);
+            settingsScreen.Closed += (_, _) => settingsOpen = false;
             settingsScreen.CenterOnDesktop();
             settingsScreen.Show();
         }

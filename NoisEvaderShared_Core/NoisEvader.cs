@@ -225,8 +225,7 @@ namespace NoisEvader
 
         private void CheckSettingsKeyCombo()
         {
-            if (inputHelper.KeyComboPressed(Keys.LeftControl, Keys.S)
-                && settingsScreen.Visible == false)
+            if (inputHelper.KeyComboPressed(Keys.LeftControl, Keys.O))
                 ShowSettings();
         }
 

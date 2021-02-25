@@ -23,36 +23,28 @@ namespace NoisEvader.UI
             BuildUI();
 
             TitleGrid.Visible = false;
-            Visible = false;
 
             Back.Click += Back_Click;
             Save.Click += Save_Click;
             MusicVolume.ValueChanged += MusicVolume_ValueChanged;
         }
 
-        private void MusicVolume_ValueChanged(object sender, Myra.Utility.ValueChangedEventArgs<float> e)
+        public void Show()
         {
-            MusicVolumeLabel.Text = e.NewValue.ToString("0.0");
-            AudioPlayer.Instance.Volume = e.NewValue / 100;
+            LoadSettingsIntoUi();
+            ShowModal(NoisEvader.Desktop);
         }
 
         private void Save_Click(object sender, EventArgs e)
         {
             SaveSettings();
-            Visible = false;
+            Close();
         }
 
         private void Back_Click(object sender, EventArgs e)
         {
             AudioPlayer.Instance.Volume = Config.GameSettings.Volume;
-            Visible = false;
-        }
-
-        public void Show()
-        {
-            LoadSettingsIntoUi();
-            Visible = true;
-            Show(NoisEvader.Desktop);
+            Close();
         }
 
         private void LoadSettingsIntoUi()
@@ -117,9 +109,7 @@ namespace NoisEvader.UI
             NoisEvader.Desktop.UpdateLayout();
 
             if (dialog != null)
-            {
                 dialog.ShowModal(NoisEvader.Desktop);
-            }
         }
 
         /// <summary>
@@ -151,6 +141,12 @@ namespace NoisEvader.UI
                 graphics.ApplyChanges();
                 return null;
             }
+        }
+
+        private void MusicVolume_ValueChanged(object sender, Myra.Utility.ValueChangedEventArgs<float> e)
+        {
+            MusicVolumeLabel.Text = e.NewValue.ToString("0.0");
+            AudioPlayer.Instance.Volume = e.NewValue / 100;
         }
     }
 }
